@@ -1,6 +1,8 @@
 package mypackage;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +19,33 @@ public class MainClass {
             }
         }
 
+        if (args.length != 4 ) {
+            System.out.println("Wrong number of args.");
+        }
+
         List<String> list = new ArrayList<>();
         ArrayList<Integer> listInt = new ArrayList<>();
+
         String inputFileName = "/home/ilya/IdeaProjects/TestSort/src/mypackage/in.txt";
+        //String inputFileName = args[0];
         String outputFileName = "/home/ilya/IdeaProjects/TestSort/src/mypackage/out.txt";
+        //String outputFileName = args[1];
+
+        readFile(inputFileName);
+        writeFileInt(outputFileName, listInt);
+
+
+        for (String line : list) {
+            listInt.add(Integer.parseInt(line)); // Можно перенести сразу в try
+        }
+        insertionSort(listInt);
+
+
+
+    }
+
+    private static ArrayList<String> readFile(String inputFileName) {
+        ArrayList<String> list = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFileName))) {
             String data;
             while ((data = reader.readLine()) != null) {
@@ -31,15 +56,12 @@ public class MainClass {
         } catch (IOException e) {
             System.out.println("IOException!");
         }
+        return list;
+    }
 
-        for (String line : list) {
-            listInt.add(Integer.parseInt(line)); // Можно перенести сразу в try
-        }
-        insertionSort(listInt);
-
+    private static void writeFileInt(String outputFileName, ArrayList<Integer> listInt) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName))) {
-            String data;
-            File file = new File(outputFileName);
+            new File(outputFileName);
             for (Integer num : listInt)
                 writer.write(num.toString() + "\n");
         } catch (FileNotFoundException e) {
@@ -47,7 +69,20 @@ public class MainClass {
         } catch (IOException e) {
             System.out.println("IOException!");
         }
+        System.out.println("Файл записан");
+    }
 
+    private static void writeFileString(String outputFileName, ArrayList<String> listInt) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName))) {
+            new File(outputFileName);
+            //for (Integer num : listInt)
+                //writer.write(num.toString() + "\n");
+        } catch (FileNotFoundException e) {
+            System.err.println("FileNotFoundException!");
+        } catch (IOException e) {
+            System.out.println("IOException!");
+        }
+        System.out.println("Файл записан");
     }
 
     private static void insertionSort(ArrayList<Integer> list) {
